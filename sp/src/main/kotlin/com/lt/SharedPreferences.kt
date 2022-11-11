@@ -103,6 +103,28 @@ class SharedPreferences(
         putString(fileName, key, value.toString())
     }
 
+    /**
+     * 删除指定文件中的指定key
+     */
+    fun removeKey(fileName: String, key: String) {
+        val file = getAndCheckFile(fileName)
+        val values = cache.getOrPut(fileName) {
+            getOrCreateValues(file)
+        }
+        values.remove(key)
+        saveValuesToFile(values, file)
+    }
+
+    /**
+     * 删除指定文件
+     */
+    fun removeFile(fileName: String) {
+        cache.remove(fileName)
+        val file = getAndCheckFile(fileName)
+        if (file.isFile)
+            file.delete()
+    }
+
     //获取并检查指定的配置文件
     private fun getAndCheckFile(fileName: String): File {
         val file = File(configDir, fileName)
@@ -123,6 +145,18 @@ class SharedPreferences(
         } catch (e: Exception) {
             e.printStackTrace()
             HashMap()
+        }
+    }
+
+    //将数据保存至本地
+    private fun saveValuesToFile(values: HashMap<String, String?>, file: File) {
+        valueSaved.valueSaved {
+            try {
+                val json = jsonLibrary.encodeToString(values)
+                file.writeText(json)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 }
