@@ -34,9 +34,7 @@ fun App() {
 
             override fun convertBack(convertedValue: String): String = convertedValue.substring(3)
         }, valueSaved = {
-            ThreadPool.submitToSingleThreadPool {
-                it()
-            }
+            ThreadPool.submitToSingleThreadPool(it)
         })
     }
     var text by remember { mutableStateOf("") }
