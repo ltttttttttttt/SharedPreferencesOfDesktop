@@ -1,0 +1,2 @@
+# SharedPreferencesOfDesktop
+Desktop中的SharedPreferences,适用于Kotlin,用于在Windows,Linux,MacOs中简单的存取配置文件
