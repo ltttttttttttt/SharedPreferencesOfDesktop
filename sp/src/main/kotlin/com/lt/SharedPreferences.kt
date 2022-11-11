@@ -21,6 +21,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.io.File
+import java.util.*
 
 /**
  * creator: lt  2022/11/11  lt.dygzs@qq.com
@@ -41,7 +42,7 @@ class SharedPreferences(
 ) {
     internal val configDir = File(configDir, appName)//配置保存目录
     internal val jsonLibrary = Json//json解析
-    internal val cache = LruMapWithGetFirst<String, HashMap<String, String?>>(lruMaxSize)//存放文件数据的LruMap,暂定最多能存放五个文件
+    internal val cache = LruMapWithGetFirst<String, MutableMap<String, String?>>(lruMaxSize)//存放文件数据的LruMap,暂定最多能存放五个文件
 
     fun getString(fileName: String, key: String, defaultValue: String): String =
         getStringOrNull(fileName, key) ?: defaultValue
@@ -129,26 +130,30 @@ class SharedPreferences(
     }
 
     //创建或获取本地的values
-    private fun getOrCreateValues(file: File): HashMap<String, String?> {
+    @Synchronized
+    private fun getOrCreateValues(file: File): MutableMap<String, String?> {
         val json = file.readText()
         if (json.isEmpty())
-            return HashMap()
+            return Collections.synchronizedMap(HashMap())
         return try {
-            jsonLibrary.decodeFromString(json)
+            Collections.synchronizedMap(jsonLibrary.decodeFromString<HashMap<String, String?>>(json))
         } catch (e: Exception) {
             e.printStackTrace()
-            HashMap()
+            Collections.synchronizedMap(HashMap())
         }
     }
 
     //将数据保存至本地
-    private fun saveValuesToFile(values: HashMap<String, String?>, file: File) {
+    @Synchronized
+    private fun saveValuesToFile(values: MutableMap<String, String?>, file: File) {
         valueSaved.valueSaved {
-            try {
-                val json = jsonLibrary.encodeToString(values)
-                file.writeText(json)
-            } catch (e: Exception) {
-                e.printStackTrace()
+            synchronized(this@SharedPreferences) {
+                try {
+                    val json = jsonLibrary.encodeToString(values)
+                    file.writeText(json)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
     }
