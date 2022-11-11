@@ -65,14 +65,7 @@ class SharedPreferences(
             getOrCreateValues(file)
         }
         values[key] = valueHandler.convertTo(value)
-        valueSaved.valueSaved {
-            try {
-                val json = jsonLibrary.encodeToString(values)
-                file.writeText(json)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
+        saveValuesToFile(values, file)
     }
 
     fun getInt(fileName: String, key: String, defaultValue: Int): Int = getIntOrNull(fileName, key) ?: defaultValue
