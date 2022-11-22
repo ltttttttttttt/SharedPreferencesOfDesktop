@@ -135,11 +135,8 @@ class SharedPreferences(
         val json = file.readText()
         if (json.isEmpty())
             return Collections.synchronizedMap(HashMap())
-        return try {
+        return synchronized(this@SharedPreferences) {
             Collections.synchronizedMap(jsonLibrary.decodeFromString<HashMap<String, String?>>(json))
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Collections.synchronizedMap(HashMap())
         }
     }
 
@@ -148,8 +145,8 @@ class SharedPreferences(
     private fun saveValuesToFile(values: MutableMap<String, String?>, file: File) {
         valueSaved.valueSaved {
             synchronized(this@SharedPreferences) {
+                val json = jsonLibrary.encodeToString(values)
                 try {
-                    val json = jsonLibrary.encodeToString(values)
                     file.writeText(json)
                 } catch (e: Exception) {
                     e.printStackTrace()
