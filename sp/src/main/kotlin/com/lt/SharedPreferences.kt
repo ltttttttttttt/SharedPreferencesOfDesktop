@@ -42,7 +42,8 @@ class SharedPreferences(
 ) {
     internal val configDir = File(configDir, appName)//配置保存目录
     internal val jsonLibrary = Json//json解析
-    internal val cache = LruMapWithGetFirst<String, MutableMap<String, String?>>(lruMaxSize)//存放文件数据的LruMap,暂定最多能存放五个文件
+    internal val cache =
+        LruMapWithGetFirst<String, MutableMap<String, String?>>(lruMaxSize)//存放文件数据的LruMap,暂定最多能存放五个文件
 
     fun getString(fileName: String, key: String, defaultValue: String): String =
         getStringOrNull(fileName, key) ?: defaultValue
@@ -69,14 +70,22 @@ class SharedPreferences(
         saveValuesToFile(values, file)
     }
 
-    fun getInt(fileName: String, key: String, defaultValue: Int): Int = getIntOrNull(fileName, key) ?: defaultValue
-    fun getIntOrNull(fileName: String, key: String): Int? = getStringOrNull(fileName, key)?.toInt()
+    fun getInt(fileName: String, key: String, defaultValue: Int): Int =
+        getIntOrNull(fileName, key) ?: defaultValue
+
+    fun getIntOrNull(fileName: String, key: String): Int? =
+        getStringOrNull(fileName, key)?.toIntOrNull()
+
     fun putInt(fileName: String, key: String, value: Int) {
         putString(fileName, key, value.toString())
     }
 
-    fun getLong(fileName: String, key: String, defaultValue: Long): Long = getLongOrNull(fileName, key) ?: defaultValue
-    fun getLongOrNull(fileName: String, key: String): Long? = getStringOrNull(fileName, key)?.toLong()
+    fun getLong(fileName: String, key: String, defaultValue: Long): Long =
+        getLongOrNull(fileName, key) ?: defaultValue
+
+    fun getLongOrNull(fileName: String, key: String): Long? =
+        getStringOrNull(fileName, key)?.toLongOrNull()
+
     fun putLong(fileName: String, key: String, value: Long) {
         putString(fileName, key, value.toString())
     }
@@ -84,7 +93,9 @@ class SharedPreferences(
     fun getBoolean(fileName: String, key: String, defaultValue: Boolean): Boolean =
         getBooleanOrNull(fileName, key) ?: defaultValue
 
-    fun getBooleanOrNull(fileName: String, key: String): Boolean? = getStringOrNull(fileName, key)?.toBoolean()
+    fun getBooleanOrNull(fileName: String, key: String): Boolean? =
+        getStringOrNull(fileName, key)?.toBooleanStrictOrNull()
+
     fun putBoolean(fileName: String, key: String, value: Boolean) {
         putString(fileName, key, value.toString())
     }
@@ -92,7 +103,9 @@ class SharedPreferences(
     fun getFloat(fileName: String, key: String, defaultValue: Float): Float =
         getFloatOrNull(fileName, key) ?: defaultValue
 
-    fun getFloatOrNull(fileName: String, key: String): Float? = getStringOrNull(fileName, key)?.toFloat()
+    fun getFloatOrNull(fileName: String, key: String): Float? =
+        getStringOrNull(fileName, key)?.toFloatOrNull()
+
     fun putFloat(fileName: String, key: String, value: Float) {
         putString(fileName, key, value.toString())
     }
