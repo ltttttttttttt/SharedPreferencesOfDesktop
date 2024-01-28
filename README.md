@@ -2,6 +2,8 @@
 
 Desktop中的SharedPreferences,适用于Kotlin,用于在Windows,Linux,MacOs中简单的存取配置文件
 
+<div align="center"><a href="https://github.com/ltttttttttttt/SharedPreferencesOfDesktop/blob/main/README.md">us English</a> | cn 简体中文</div>
+
 # 如何使用
 
 1. 在你根目录下的build.gradle.kts中添加:
