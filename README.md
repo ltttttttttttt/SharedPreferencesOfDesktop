@@ -1,12 +1,12 @@
 # SharedPreferencesOfDesktop
 
-Desktop中的SharedPreferences,适用于Kotlin,用于在Windows,Linux,MacOs中简单的存取配置文件
+SharedPreferences in Desktop, suitable for Kotlin, for simple access to configuration files in Windows, Linux, MacOs
 
-<div align="center"><a href="https://github.com/ltttttttttttt/SharedPreferencesOfDesktop/blob/main/README.md">us English</a> | cn 简体中文</div>
+<div align="center">us English | <a href="https://github.com/ltttttttttttt/SharedPreferencesOfDesktop/blob/main/README_CN.md">cn 简体中文</a></div>
 
-# 如何使用
+# Add to your project
 
-1. 在你根目录下的build.gradle.kts中添加:
+1. Your root dir, build.gradle.kts add:
 
 ```kotlin
 buildscript {
@@ -24,7 +24,7 @@ allprojects {
 }
 ```
 
-2. 在你的Compose-jb项目的代码目录(一般是desktop)下的build.gradle.kts中添加:
+2. Your desktop dir, build.gradle.kts add:
 
 version
 = [![](https://jitpack.io/v/ltttttttttttt/SharedPreferencesOfDesktop.svg)](https://jitpack.io/#ltttttttttttt/SharedPreferencesOfDesktop)
@@ -42,28 +42,28 @@ kotlin {
 }
 ```
 
-3. 使用SharedPreferences
+3. Use SharedPreferences
 
 ```kotlin
-//创建sp对象
+//Create SharedPreferences
 val sp = SharedPreferences("appName")
-//获取string值
+//Get String value
 sp.getStringOrNull("fileName", "key")
-//设置string值
+//Set String value
 sp.putString("fileName", "key", "value")
 ```
 
-ps:不止支持string类型,也支持Int,Long,Boolean,Float类型
+ps:Support String, Int, Long, Boolean, Float
 
-4. 自定义配置,在创建SharedPreferences对象的时候可以配置以下内容
+4. Custom Configuration, When creating a SharedPreferences object, the following content can be configured
 
 ```kotlin
 /**
- * @param appName 应用名
- * @param configDir 配置文件夹
- * @param valueHandler 处理value值,可以用作加解密等
- * @param valueSaved 保存值时的方法,一般用来将保存的任务放到单例子线程中执行
- * @param lruMaxSize LruMap最多保存多少条数据(多少个文件里的数据)
+ * @param appName Application Name
+ * @param configDir Configure dir
+ * @param valueHandler Process value values, which can be used for encryption and decryption, etc
+ * @param valueSaved The method of saving values is generally used to place the saved task into a single instance thread for execution
+ * @param lruMaxSize How many pieces of data can LruMap save at most (data from multiple files)
  */
 class SharedPreferences()
 ```
